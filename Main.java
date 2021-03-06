@@ -1,6 +1,6 @@
 package com.testng.PojoDemo;
 
-import java.io.File;
+import java.io.File; 
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
@@ -18,41 +18,55 @@ import org.testng.annotations.Parameters;
 
 public class Main {
 
-	public static void main(String[] args) throws Exception, InterruptedException {
-			Pojo fields = new Pojo();
-			
+	@Parameters("browser")
+	public static void main(String browser) throws Exception, InterruptedException {
+		// POJO Call
+		Pojo fields = new Pojo();
+		
+		//SETTING WEBDRIVER
 			fields.setDriver(null);
-			fields.setFilePath("user.dir");	
+			WebDriver Driver = fields.getDriver();
 			
-			setUp(fields.getDriver(), fields.getFilePath());
+		// SETTING CHROMEPATH
+			fields.setChromepath("D:\\Drivers\\chromedriver.exe");
+			String chromepath = fields.getChromepath();
+		
+		// SETTING FIREFOXPATH
+			fields.setFirefoxpath("D:\\Drivers\\geckodriver.exe");
+			String firefoxpath = fields.getFirefoxpath();
+		
+		// SETTING EDGEPATH
+			fields.setEdgepath("D:\\Drivers\\msedgedriver.exe");
+			String edgepath = fields.getEdgepath();
+						
+			setUp( browser, Driver, chromepath, firefoxpath, edgepath);
 			flipkart(fields.getDriver());
 	}
 	
-	@Parameters("browser")
 	@BeforeMethod
-	public static void setUp(WebDriver driver, String browser) {
+	public static void setUp(String browser, WebDriver driver, String Chromepath, String Firefoxpath, String Edgepath) {
 
 		if (browser.equalsIgnoreCase("chrome")) {
 			System.out.println("Inside ChromeTest Method");
-			System.setProperty("webdriver.chrome.driver", "D:\\Drivers\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", Chromepath);
 			driver = new ChromeDriver();
 		}
 
 		else if (browser.equalsIgnoreCase("firefox")) {
-			System.setProperty("webdriver.gecko.driver", "D:\\Drivers\\geckodriver.exe");
+			System.setProperty("webdriver.gecko.driver", Firefoxpath);
 			System.out.println("Inside FireFoxTest Method");
 			driver = new FirefoxDriver();
 		}
 
 		else if (browser.equalsIgnoreCase("edge")) {
-			System.setProperty("webdriver.edge.driver", "D:\\Drivers\\msedgedriver.exe");
+			System.setProperty("webdriver.edge.driver", Edgepath);
 			System.out.println("Inside Edge Method");
 			driver = new EdgeDriver();
 		}
 	}
 
 	public static void flipkart(WebDriver driver) throws IOException, InterruptedException {
-		// Navigating to Amazon Website
+		// Navigating to Flipkart Website
 		driver.get("https://www.flipkart.com/");
 		driver.manage().window().maximize();
 
